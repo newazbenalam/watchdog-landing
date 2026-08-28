@@ -4,13 +4,13 @@ export const bdAppsSubscriptionApi = "https://bdappsdigitalapps.com/NADB26099";
 export const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL ?? "";
 
 export const screenshots = [
-  "Screenshot_1787398394.png",
-  "Screenshot_1787405554.png",
-  "Screenshot_1787405569.png",
-  "Screenshot_1787405578.png",
-  "Screenshot_1787405582.png",
-  "Screenshot_1787896741.png",
-  "Screenshot_1787896750.png",
+  "Screenshot_1787398394.webp",
+  "Screenshot_1787405554.webp",
+  "Screenshot_1787405569.webp",
+  "Screenshot_1787405578.webp",
+  "Screenshot_1787405582.webp",
+  "Screenshot_1787896741.webp",
+  "Screenshot_1787896750.webp",
 ];
 
 export const trusts = [

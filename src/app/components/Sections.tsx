@@ -21,7 +21,7 @@ export function Hero() {
         <div className="row align-items-center g-5">
           <div className="col-lg-6 hero-copy" data-aos="fade-up">
             <p className="eyebrow mb-3">Real-Time Observability & Uptime Platform</p>
-            <h1 className="section-title mb-4">Watch<span className="gradient-text">log</span></h1>
+            <h1 className="section-title mb-4">Watch<span className="gradient-text">Log</span></h1>
             <p className="lead fs-4 text-muted-soft mb-3">Modern, real-time observability, server telemetry, and uptime monitoring engineered for agile engineering teams and indie builders.</p>
             <p className="text-muted-soft mb-4"><span className="fw-bold text-body">Observing </span>{typed}<span aria-hidden="true">|</span></p>
             <div className="hero-actions">
