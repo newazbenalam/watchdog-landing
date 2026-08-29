@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Pass build-time environment variables if needed
+# Pass build-time environment variables
 ARG NEXT_PUBLIC_APK_DOWNLOAD_URL
 ARG NEXT_PUBLIC_BDAPPS_API_URL
 ENV NEXT_PUBLIC_APK_DOWNLOAD_URL=${NEXT_PUBLIC_APK_DOWNLOAD_URL}
@@ -40,8 +40,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy static assets and standalone build output
-COPY --from=builder /app/public ./public
+# Copy public assets, standalone build output, and static files with correct permissions
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
