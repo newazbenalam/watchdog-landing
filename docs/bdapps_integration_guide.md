@@ -405,7 +405,7 @@ NEXT_PUBLIC_BDAPPS_API_URL=
 
 ## 4. Purchasing Flow
 
-1. User clicks **Subscribe with BDApps** in the monthly pricing tier (BDT 9.99/month).
+1. User clicks **Subscribe with BDApps** in the monthly pricing tier (2.78 BDT/month including VAT+SD+Sc).
 2. User enters an 11-digit Bangladeshi mobile number (`01XXXXXXXXX`).
 3. App dispatches `POST /api/bdapps/send-otp` with `user_mobile`.
 4. BDApps sends a 4-8 digit SMS verification code and returns a `referenceNo`.

@@ -85,11 +85,11 @@ export function PricingSection() {
           <div className="row g-4 justify-content-center">
             <div className="col-md-6 col-lg-4" data-aos="fade-up">
               <article className="pricing-card">
-                <span className="pricing-badge">Coming soon</span>
+                <span className="pricing-badge">Trial</span>
                 <span className="icon-box"><i className="bi bi-calendar-week" /></span>
-                <h3 className="h4 fw-bold">7-day access</h3>
-                <div className="pricing-price"><span>BDT</span><strong>3.50</strong></div>
-                <p className="text-muted-soft mb-4">Short-term access for testing WatchLog features.</p>
+                <h3 className="h4 fw-bold">Trial access</h3>
+                <div className="pricing-price"><span>BDT</span><strong>2.78</strong><small className="fs-6 text-muted-soft fw-normal">/day</small></div>
+                <p className="text-muted-soft mb-4">2.78 BDT/day including VAT+SD+Sc. Short-term access for testing WatchLog features.</p>
                 <ul className="pricing-list">
                   <li><i className="bi bi-check-circle-fill" />All premium WatchLog monitoring probes</li>
                   <li><i className="bi bi-check-circle-fill" />No recurring monthly commitment</li>
@@ -103,8 +103,8 @@ export function PricingSection() {
                 <span className="pricing-badge">Monthly</span>
                 <span className="icon-box"><i className="bi bi-calendar2-check" /></span>
                 <h3 className="h4 fw-bold">Monthly access</h3>
-                <div className="pricing-price"><span>BDT</span><strong>9.99</strong></div>
-                <p className="text-muted-soft mb-4">Recurring monthly access. A verification code will be sent to your BDApps number.</p>
+                <div className="pricing-price"><span>BDT</span><strong>2.78</strong><small className="fs-6 text-muted-soft fw-normal">/month</small></div>
+                <p className="text-muted-soft mb-4">2.78 BDT/month including VAT+SD+Sc. Recurring monthly access via BDApps mobile balance.</p>
                 <ul className="pricing-list">
                   <li><i className="bi bi-check-circle-fill" />1-Click SSH server agent provisioning</li>
                   <li><i className="bi bi-check-circle-fill" />Postgres, MySQL, Redis & Supabase monitoring</li>
@@ -296,7 +296,7 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
           <form onSubmit={requestOtp}>
             <p className="eyebrow mb-2">Monthly subscription</p>
             <h2 className="h3 fw-bold" id="subscriptionTitle">Confirm your mobile number</h2>
-            <p className="text-muted-soft">BDApps will send a verification code to activate monthly access at BDT 9.99.</p>
+            <p className="text-muted-soft">BDApps will send a verification code to activate monthly access at 2.78 BDT/month including VAT+SD+Sc.</p>
             <label className="form-label fw-bold" htmlFor="subscriptionPhone">BDApps mobile number</label>
             <input className="form-control" id="subscriptionPhone" type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="01XXXXXXXXX" value={phone} onChange={(event) => setPhone(event.target.value)} disabled={busy} required />
             {error && <p className="subscription-error" role="alert">{error}</p>}
