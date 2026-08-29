@@ -136,15 +136,38 @@ export function PricingSection() {
   );
 }
 
-type SubscriptionResponse = { success?: boolean; message?: string; statusCode?: string; statusDetail?: string; referenceNo?: string; subscriptionStatus?: string };
+type SubscriptionResponse = {
+  success?: boolean;
+  message?: string;
+  statusCode?: string;
+  statusDetail?: string;
+  referenceNo?: string;
+  subscriptionStatus?: string;
+  isSubscribed?: boolean;
+  subscriberId?: string;
+};
 
 function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [step, setStep] = useState<"phone" | "otp" | "success">("phone");
+  const [step, setStep] = useState<"phone" | "otp" | "success" | "check">("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [referenceNo, setReferenceNo] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    try {
+      const savedPhone = localStorage.getItem("watchlog_subscriber_phone");
+      const savedStatus = localStorage.getItem("watchlog_subscription_status");
+      if (savedPhone && savedStatus === "REGISTERED") {
+        setPhone(savedPhone);
+        setStep("success");
+      }
+    } catch {
+      // localStorage may be unavailable
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -155,7 +178,6 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
 
   const close = () => {
     setStep("phone");
-    setPhone("");
     setOtp("");
     setReferenceNo("");
     setError("");
@@ -164,39 +186,184 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
   };
 
   const post = async (endpoint: string, data: Record<string, string>) => {
-    const response = await fetch(`${bdAppsSubscriptionApi}/${endpoint}`, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(data) });
-    const body = await response.json() as SubscriptionResponse;
-    if (!response.ok) throw new Error(body.message || body.statusDetail || "The subscription service is unavailable. Please try again.");
+    const apiBase = bdAppsSubscriptionApi.replace(/\/+$/, "");
+    const url = `${apiBase}/${endpoint.replace(/^\/+/, "")}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(data),
+    });
+    const body = (await response.json()) as SubscriptionResponse;
+    if (!response.ok && !body.statusCode && !body.message) {
+      throw new Error("The subscription service is unavailable. Please try again.");
+    }
     return body;
   };
 
   const requestOtp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const normalizedPhone = phone.replace(/\D/g, "").replace(/^880/, "0");
-    if (!/^01[3-9]\d{8}$/.test(normalizedPhone)) { setError("Enter a valid Bangladeshi mobile number."); return; }
-    setBusy(true); setError("");
+    if (!/^01[3-9]\d{8}$/.test(normalizedPhone)) {
+      setError("Enter a valid 11-digit Bangladeshi mobile number (01XXXXXXXXX).");
+      return;
+    }
+    setBusy(true);
+    setError("");
     try {
       const response = await post("send_otp.php", { user_mobile: normalizedPhone });
-      if (!response.success || !response.referenceNo) throw new Error(response.message || response.statusDetail || "Could not send the verification code.");
-      setPhone(normalizedPhone); setReferenceNo(response.referenceNo); setStep("otp");
-    } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not send the verification code."); }
-    finally { setBusy(false); }
+      if (!response.success || !response.referenceNo) {
+        throw new Error(response.message || response.statusDetail || "Could not send the verification code.");
+      }
+      setPhone(normalizedPhone);
+      setReferenceNo(response.referenceNo);
+      setStep("otp");
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Could not send the verification code.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   const verifyOtp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!/^\d{4,8}$/.test(otp)) { setError("Enter the verification code sent to your phone."); return; }
-    setBusy(true); setError("");
+    if (!/^\d{4,8}$/.test(otp)) {
+      setError("Enter the 4-8 digit verification code sent to your phone.");
+      return;
+    }
+    setBusy(true);
+    setError("");
     try {
       const response = await post("verify_otp.php", { Otp: otp, referenceNo });
-      if (response.statusCode !== "S1000" || response.subscriptionStatus?.toUpperCase() !== "REGISTERED") throw new Error(response.statusDetail || "Subscription could not be confirmed.");
+      const status = (response.subscriptionStatus || "").toUpperCase().trim().replace(/\.+$/, "");
+      if (response.statusCode !== "S1000" || status !== "REGISTERED") {
+        throw new Error(response.message || response.statusDetail || "Subscription could not be confirmed.");
+      }
+      try {
+        localStorage.setItem("watchlog_subscriber_phone", phone);
+        localStorage.setItem("watchlog_subscription_status", "REGISTERED");
+      } catch {
+        // ignore storage errors
+      }
       setStep("success");
-    } catch (reason) { setError(reason instanceof Error ? reason.message : "Subscription could not be confirmed."); }
-    finally { setBusy(false); }
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Subscription could not be confirmed.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const checkExistingStatus = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const normalizedPhone = phone.replace(/\D/g, "").replace(/^880/, "0");
+    if (!/^01[3-9]\d{8}$/.test(normalizedPhone)) {
+      setError("Enter a valid 11-digit Bangladeshi mobile number.");
+      return;
+    }
+    setBusy(true);
+    setError("");
+    try {
+      const response = await post("check_subscription.php", { user_mobile: normalizedPhone });
+      const status = (response.subscriptionStatus || "").toUpperCase().trim().replace(/\.+$/, "");
+      if (response.isSubscribed || status === "REGISTERED") {
+        try {
+          localStorage.setItem("watchlog_subscriber_phone", normalizedPhone);
+          localStorage.setItem("watchlog_subscription_status", "REGISTERED");
+        } catch {
+          // ignore
+        }
+        setPhone(normalizedPhone);
+        setStep("success");
+      } else {
+        setError("No active subscription found for this number. Please subscribe below.");
+        setStep("phone");
+      }
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to verify subscription status.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (!open) return null;
-  return <div className="subscription-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) close(); }}><section className="subscription-modal" role="dialog" aria-modal="true" aria-labelledby="subscriptionTitle"><button className="subscription-modal-close" type="button" aria-label="Close subscription dialog" onClick={close}><i className="bi bi-x-lg" /></button>{step === "phone" && <form onSubmit={requestOtp}><p className="eyebrow mb-2">Monthly subscription</p><h2 className="h3 fw-bold" id="subscriptionTitle">Confirm your mobile number</h2><p className="text-muted-soft">BDApps will send a verification code to activate monthly access at BDT 9.99.</p><label className="form-label fw-bold" htmlFor="subscriptionPhone">BDApps mobile number</label><input className="form-control" id="subscriptionPhone" type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="01XXXXXXXXX" value={phone} onChange={(event) => setPhone(event.target.value)} disabled={busy} required />{error && <p className="subscription-error" role="alert">{error}</p>}<button className="btn btn-gradient rounded-pill w-100 mt-4" type="submit" disabled={busy}>{busy ? "Sending code..." : "Send verification code"}</button></form>}{step === "otp" && <form onSubmit={verifyOtp}><p className="eyebrow mb-2">Verification required</p><h2 className="h3 fw-bold" id="subscriptionTitle">Enter your code</h2><p className="text-muted-soft">We sent a verification code to {phone}. Enter it to activate your subscription.</p><label className="form-label fw-bold" htmlFor="subscriptionOtp">Verification code</label><input className="form-control" id="subscriptionOtp" type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={8} value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))} disabled={busy} required />{error && <p className="subscription-error" role="alert">{error}</p>}<button className="btn btn-gradient rounded-pill w-100 mt-4" type="submit" disabled={busy}>{busy ? "Confirming subscription..." : "Confirm subscription"}</button><button className="btn btn-link w-100 mt-2" type="button" disabled={busy} onClick={() => { setStep("phone"); setOtp(""); setError(""); }}>Use another number</button></form>}{step === "success" && <div className="text-center"><span className="subscription-success-icon"><i className="bi bi-check-lg" /></span><p className="eyebrow mt-3 mb-2">Subscription active</p><h2 className="h3 fw-bold" id="subscriptionTitle">You are ready to use WatchLog</h2><p className="text-muted-soft">Your BDApps monthly subscription has been confirmed.</p>{apkDownloadUrl ? <a className="btn btn-gradient rounded-pill w-100 mt-4" href={apkDownloadUrl} download><i className="bi bi-android2 me-2" />Download Android APK</a> : <p className="subscription-error mt-4 mb-0" role="status">The APK download link has not been configured yet.</p>}</div>}</section></div>;
+  return (
+    <div className="subscription-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) close(); }}>
+      <section className="subscription-modal" role="dialog" aria-modal="true" aria-labelledby="subscriptionTitle">
+        <button className="subscription-modal-close" type="button" aria-label="Close subscription dialog" onClick={close}>
+          <i className="bi bi-x-lg" />
+        </button>
+
+        {step === "phone" && (
+          <form onSubmit={requestOtp}>
+            <p className="eyebrow mb-2">Monthly subscription</p>
+            <h2 className="h3 fw-bold" id="subscriptionTitle">Confirm your mobile number</h2>
+            <p className="text-muted-soft">BDApps will send a verification code to activate monthly access at BDT 9.99.</p>
+            <label className="form-label fw-bold" htmlFor="subscriptionPhone">BDApps mobile number</label>
+            <input className="form-control" id="subscriptionPhone" type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="01XXXXXXXXX" value={phone} onChange={(event) => setPhone(event.target.value)} disabled={busy} required />
+            {error && <p className="subscription-error" role="alert">{error}</p>}
+            <button className="btn btn-gradient rounded-pill w-100 mt-4" type="submit" disabled={busy}>
+              {busy ? "Sending code..." : "Send verification code"}
+            </button>
+            <button className="btn btn-link w-100 mt-2 text-decoration-none small" type="button" disabled={busy} onClick={() => { setStep("check"); setError(""); }}>
+              Already subscribed? Check status
+            </button>
+          </form>
+        )}
+
+        {step === "check" && (
+          <form onSubmit={checkExistingStatus}>
+            <p className="eyebrow mb-2">Verify subscription</p>
+            <h2 className="h3 fw-bold" id="subscriptionTitle">Check subscription status</h2>
+            <p className="text-muted-soft">Enter your subscribed mobile number to verify active access.</p>
+            <label className="form-label fw-bold" htmlFor="checkPhone">BDApps mobile number</label>
+            <input className="form-control" id="checkPhone" type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="01XXXXXXXXX" value={phone} onChange={(event) => setPhone(event.target.value)} disabled={busy} required />
+            {error && <p className="subscription-error" role="alert">{error}</p>}
+            <button className="btn btn-gradient rounded-pill w-100 mt-4" type="submit" disabled={busy}>
+              {busy ? "Checking..." : "Verify active subscription"}
+            </button>
+            <button className="btn btn-link w-100 mt-2 text-decoration-none small" type="button" disabled={busy} onClick={() => { setStep("phone"); setError(""); }}>
+              Need to subscribe? Go back
+            </button>
+          </form>
+        )}
+
+        {step === "otp" && (
+          <form onSubmit={verifyOtp}>
+            <p className="eyebrow mb-2">Verification required</p>
+            <h2 className="h3 fw-bold" id="subscriptionTitle">Enter your code</h2>
+            <p className="text-muted-soft">We sent a verification code to {phone}. Enter it to activate your subscription.</p>
+            <label className="form-label fw-bold" htmlFor="subscriptionOtp">Verification code</label>
+            <input className="form-control" id="subscriptionOtp" type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={8} value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))} disabled={busy} required />
+            {error && <p className="subscription-error" role="alert">{error}</p>}
+            <button className="btn btn-gradient rounded-pill w-100 mt-4" type="submit" disabled={busy}>
+              {busy ? "Confirming subscription..." : "Confirm subscription"}
+            </button>
+            <button className="btn btn-link w-100 mt-2" type="button" disabled={busy} onClick={() => { setStep("phone"); setOtp(""); setError(""); }}>
+              Use another number
+            </button>
+          </form>
+        )}
+
+        {step === "success" && (
+          <div className="text-center">
+            <span className="subscription-success-icon"><i className="bi bi-check-lg" /></span>
+            <p className="eyebrow mt-3 mb-2">Subscription active</p>
+            <h2 className="h3 fw-bold" id="subscriptionTitle">You are ready to use WatchLog</h2>
+            <p className="text-muted-soft">Your BDApps monthly subscription for <strong>{phone}</strong> is active.</p>
+            {apkDownloadUrl ? (
+              <a className="btn btn-gradient rounded-pill w-100 mt-4" href={apkDownloadUrl} download>
+                <i className="bi bi-android2 me-2" />Download Android APK
+              </a>
+            ) : (
+              <p className="subscription-error mt-4 mb-0" role="status">The APK download link has not been configured yet.</p>
+            )}
+            <button className="btn btn-link w-100 mt-3 text-muted-soft small" type="button" onClick={() => { setStep("phone"); setPhone(""); setOtp(""); }}>
+              Switch or re-verify another number
+            </button>
+          </div>
+        )}
+      </section>
+    </div>
+  );
 }
 
 

@@ -1,6 +1,6 @@
 export const basePath = "";
 export const assetBase = `${basePath}/assets/`;
-export const bdAppsSubscriptionApi = "https://bdappsdigitalapps.com/NADB26099";
+export const bdAppsSubscriptionApi = process.env.NEXT_PUBLIC_BDAPPS_API_URL || "/api/bdapps";
 export const apkDownloadUrl = process.env.NEXT_PUBLIC_APK_DOWNLOAD_URL ?? "";
 
 export const screenshots = [

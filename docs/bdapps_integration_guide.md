@@ -357,3 +357,60 @@
     323 +9. Confirm the Flutter app works offline by retaining the last known state but does not invent a new active ent
          itlement.
     324 +
+
+# WatchLog — BDApps Mobile Subscription Integration Guide
+
+This guide documents the BDApps mobile subscription integration for WatchLog, converting and upgrading the PHP proxy samples into full-stack TypeScript/Next.js API route handlers and services.
+
+---
+
+## 1. Architecture Overview
+
+WatchLog supports two deployment modes for BDApps mobile billing:
+1. **Next.js Full-Stack API Routes (Recommended)**: Built directly into `watchdog-landing` (`src/lib/bdapps/` and `src/app/api/bdapps/`). Works on Node.js, Vercel, Docker, etc.
+2. **Standalone PHP Backend (`backend_php/`)**: Standalone PHP scripts with CORS and JSON support for deployment to Apache/Nginx/cPanel servers.
+
+---
+
+## 2. Supported Endpoints
+
+All endpoints support both `application/json` and `application/x-www-form-urlencoded` request bodies and full CORS preflight.
+
+| Operation | Next.js API Route | Legacy / PHP URL | Method |
+|---|---|---|---|
+| **Request OTP** | `/api/bdapps/send-otp` | `/send_otp.php` | `POST` |
+| **Verify OTP** | `/api/bdapps/verify-otp` | `/verify_otp.php` | `POST` |
+| **Check Status** | `/api/bdapps/check-subscription` | `/check_subscription.php` | `GET` / `POST` |
+| **Unsubscribe** | `/api/bdapps/unsubscribe` | `/unsubscribe.php` | `POST` |
+| **Listener Webhook** | `/api/bdapps/subscription-listener` | `/subscription_listener.php` | `POST` |
+| **SMS Gateway** | `/api/bdapps/sms` | `/sms.php` | `POST` |
+| **USSD Menu** | `/api/bdapps/ussd` | `/ussd.php` | `POST` |
+
+---
+
+## 3. Environment Configuration
+
+Set the following variables in `.env`:
+
+```env
+BDAPPS_APP_ID=APP_139287
+BDAPPS_APP_PASSWORD=a0f308c541496f23a4e96c9f42487f3e
+BDAPPS_BASE_URL=https://developer.bdapps.com
+BDAPPS_APP_HASH=WatchLog
+NEXT_PUBLIC_APK_DOWNLOAD_URL=/app-release.apk
+NEXT_PUBLIC_BDAPPS_API_URL=
+```
+
+---
+
+## 4. Purchasing Flow
+
+1. User clicks **Subscribe with BDApps** in the monthly pricing tier (BDT 9.99/month).
+2. User enters an 11-digit Bangladeshi mobile number (`01XXXXXXXXX`).
+3. App dispatches `POST /api/bdapps/send-otp` with `user_mobile`.
+4. BDApps sends a 4-8 digit SMS verification code and returns a `referenceNo`.
+5. User enters the OTP code.
+6. App dispatches `POST /api/bdapps/verify-otp` with `Otp` and `referenceNo`.
+7. Once confirmed with `statusCode: "S1000"` and `subscriptionStatus: "REGISTERED"`:
+   - Subscription state is retained in browser local storage.
+   - APK download button unlocks immediately.
