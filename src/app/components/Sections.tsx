@@ -210,7 +210,7 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
     setBusy(true);
     setError("");
     try {
-      const response = await post("send_otp.php", { user_mobile: normalizedPhone });
+      const response = await post("send_otp", { user_mobile: normalizedPhone });
       if (!response.success || !response.referenceNo) {
         throw new Error(response.message || response.statusDetail || "Could not send the verification code.");
       }
@@ -233,7 +233,7 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
     setBusy(true);
     setError("");
     try {
-      const response = await post("verify_otp.php", { Otp: otp, referenceNo });
+      const response = await post("verify_otp", { Otp: otp, referenceNo });
       const status = (response.subscriptionStatus || "").toUpperCase().trim().replace(/\.+$/, "");
       if (response.statusCode !== "S1000" || status !== "REGISTERED") {
         throw new Error(response.message || response.statusDetail || "Subscription could not be confirmed.");
@@ -262,7 +262,7 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
     setBusy(true);
     setError("");
     try {
-      const response = await post("check_subscription.php", { user_mobile: normalizedPhone });
+      const response = await post("check_subscription", { user_mobile: normalizedPhone });
       const status = (response.subscriptionStatus || "").toUpperCase().trim().replace(/\.+$/, "");
       if (response.isSubscribed || status === "REGISTERED") {
         try {
