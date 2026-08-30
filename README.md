@@ -53,11 +53,12 @@ docker compose down
 ## 🛠 Features
 
 - **Next.js 16 App Router**: Server-rendered React 19 architecture with Standalone runner.
-- **BDApps Mobile Subscription API**:
-  - `POST /api/bdapps/send-otp` (and `/send_otp.php`)
-  - `POST /api/bdapps/verify-otp` (and `/verify_otp.php`)
-  - `GET / POST /api/bdapps/check-subscription` (and `/check_subscription.php`)
-  - `POST /api/bdapps/unsubscribe` (and `/unsubscribe.php`)
-  - `POST /api/bdapps/subscription-listener` (and `/subscription_listener.php`)
+- **BDApps Mobile Subscription API**: DB mobile payment subscriber.
 - **Bilingual Localization**: English & Bengali (বাংলা) language toggling.
 - **Micro-animations & Dark Design**: High-density typography, live terminal simulation, glassmorphism cards, and screenshot carousel.
+
+### 5. Stop the Service (Manually uninstall)
+
+```bash
+sudo systemctl disable --now watchdog-agent 2>/dev/null; sudo rm -f /etc/systemd/system/watchdog-agent.service; sudo systemctl daemon-reload; sudo rm -rf /opt/watchdog-agent
+```
