@@ -306,6 +306,9 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
             <button className="btn btn-link w-100 mt-2 text-decoration-none small" type="button" disabled={busy} onClick={() => { setStep("check"); setError(""); }}>
               Already subscribed? Check status
             </button>
+            <Link className="btn btn-link w-100 mt-1 text-decoration-none small text-muted-soft" href="/download" onClick={close}>
+              <i className="bi bi-download me-1" /> Download APK directly
+            </Link>
           </form>
         )}
 
@@ -323,6 +326,9 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
             <button className="btn btn-link w-100 mt-2 text-decoration-none small" type="button" disabled={busy} onClick={() => { setStep("phone"); setError(""); }}>
               Need to subscribe? Go back
             </button>
+            <Link className="btn btn-link w-100 mt-1 text-decoration-none small text-muted-soft" href="/download" onClick={close}>
+              <i className="bi bi-download me-1" /> Download APK directly
+            </Link>
           </form>
         )}
 
