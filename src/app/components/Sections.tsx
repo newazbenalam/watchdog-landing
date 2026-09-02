@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apkDownloadUrl, assetBase, bdAppsSubscriptionApi, comparison, faqs, featureGroups, screenshots, tech, trusts, workflow } from "../data";
 
@@ -148,6 +149,7 @@ type SubscriptionResponse = {
 };
 
 function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const router = useRouter();
   const [step, setStep] = useState<"phone" | "otp" | "success" | "check">("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
@@ -244,7 +246,8 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
       } catch {
         // ignore storage errors
       }
-      setStep("success");
+      close();
+      router.push("/download");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Subscription could not be confirmed.");
     } finally {
@@ -272,7 +275,8 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
           // ignore
         }
         setPhone(normalizedPhone);
-        setStep("success");
+        close();
+        router.push("/download");
       } else {
         setError("No active subscription found for this number. Please subscribe below.");
         setStep("phone");
