@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap");
 :root{--primary:#4f46e5;--secondary:#7c3aed;--accent:#22c55e;--bg:#fff;--surface:#f8fafc;--text:#0f172a;--muted:#64748b;--border:rgba(15,23,42,.1);--glass:rgba(255,255,255,.76);--shadow:0 24px 70px rgba(15,23,42,.12);--gradient:linear-gradient(135deg,#4f46e5,#7c3aed)}
 [data-theme=dark]{--bg:#070914;--surface:#101424;--text:#f8fafc;--muted:#a7b0c0;--border:rgba(248,250,252,.12);--glass:rgba(16,20,36,.76);--shadow:0 24px 70px rgba(0,0,0,.45)}
@@ -7,6 +7,10 @@
 
 .subscription-modal-backdrop{position:fixed;inset:0;z-index:1300;display:grid;place-items:center;padding:24px;background:rgba(2,6,23,.66);backdrop-filter:blur(8px)}.subscription-modal{position:relative;width:min(100%,480px);padding:36px;border-radius:8px;color:var(--text);background:var(--bg);border:1px solid var(--border);box-shadow:var(--shadow)}.subscription-modal-close{position:absolute;top:16px;right:16px;display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--border);border-radius:50%;color:var(--text);background:var(--surface)}.subscription-error{margin:14px 0 0;color:#b91c1c;font-size:.9rem;font-weight:700}.subscription-success-icon{display:inline-grid;place-items:center;width:62px;height:62px;border-radius:50%;color:#fff;background:var(--accent);font-size:1.8rem}
 .language-toggle{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 13px;border:1px solid var(--border);border-radius:999px;color:var(--text);background:var(--glass);font-weight:800;font-size:.86rem}.language-toggle i{font-size:1rem}[data-language=bn] body{font-family:"Noto Sans Bengali",Inter,system-ui,sans-serif}
+.carrier-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--border);box-shadow:0 4px 18px rgba(15,23,42,.06);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);vertical-align:middle}
+.carrier-pill .carrier-logo{height:16px;width:auto;object-fit:contain;display:block}
+.carrier-pill .carrier-divider{width:1px;height:12px;background:var(--border);opacity:.7}
+.gradient-crimson{background:linear-gradient(135deg,#ff2a6d 0%,#e11d48 45%,#990024 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent;display:inline-block}
 
 
 

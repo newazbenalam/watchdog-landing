@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       if (statusRes.isSubscribed) {
         await sendUssd(sessionId, "Welcome to WatchLog! Reply:\n1. Unsubscribe\n2. Status", address, "mt-cont");
       } else {
-        await sendUssd(sessionId, "WatchLog: Real-Time Observability\nMonthly: 2.78 BDT/month (incl. VAT+SD+Sc)\nPlease confirm subscription prompt.", address, "mt-fin");
+        await sendUssd(sessionId, "WatchLog: Real-Time Observability\nDaily: 2.78 BDT/day (incl. VAT+SD+Sc)\nAvailable for Robi and Cirkle users only.\nPlease confirm subscription prompt.", address, "mt-fin");
       }
     }
 

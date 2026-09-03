@@ -405,7 +405,7 @@ NEXT_PUBLIC_BDAPPS_API_URL=
 
 ## 4. Purchasing Flow
 
-1. User clicks **Subscribe with BDApps** in the monthly pricing tier (2.78 BDT/month including VAT+SD+Sc).
+1. User clicks **Subscribe with BDApps** in the daily pricing tier (2.78 BDT/day including VAT+SD+Sc). Subscriptions are available for Robi and Cirkle users only.
 2. User enters an 11-digit Bangladeshi mobile number (`01XXXXXXXXX`).
 3. App dispatches `POST /api/bdapps/send-otp` with `user_mobile`.
 4. BDApps sends a 4-8 digit SMS verification code and returns a `referenceNo`.

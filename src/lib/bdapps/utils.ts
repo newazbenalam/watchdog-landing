@@ -64,7 +64,7 @@ export function mapStatusCodeToMessage(code?: string, detail?: string): string {
     case "E1317":
       return "Invalid mobile number. Please enter a valid Bangladeshi mobile number.";
     case "E1326":
-      return "Insufficient mobile balance to complete the subscription (2.78 BDT/month including VAT+SD+Sc).";
+      return "Insufficient mobile balance to complete the subscription (2.78 BDT/day including VAT+SD+Sc).";
     case "E1337":
       return "A duplicate request is already in progress. Please wait a moment.";
     case "E1601":

@@ -23,7 +23,15 @@ export function Hero() {
           <div className="col-lg-6 hero-copy" data-aos="fade-up">
             <p className="eyebrow mb-3">Real-Time Observability & Uptime Platform</p>
             <h1 className="section-title mb-4">Watch<span className="gradient-text">Log</span></h1>
-            <p className="lead fs-4 text-muted-soft mb-3">Modern, real-time observability, server telemetry, and uptime monitoring engineered for agile engineering teams and indie builders.</p>
+            <p className="lead fs-4 text-muted-soft mb-3">
+              Modern, real-time observability, server telemetry, and uptime monitoring engineered for agile engineering teams and indie builders.{" "}
+              <span className="fw-bold gradient-crimson me-2">Available for Robi and Cirkle users only.</span>
+              <span className="carrier-pill">
+                <Image src={`${assetBase}robi-logo.svg`} alt="Robi" width={42} height={16} className="carrier-logo" />
+                <span className="carrier-divider" />
+                <Image src={`${assetBase}cirkle-logo.svg`} alt="Cirkle" width={44} height={16} className="carrier-logo" />
+              </span>
+            </p>
             <p className="text-muted-soft mb-4"><span className="fw-bold text-body">Observing </span>{typed}<span aria-hidden="true">|</span></p>
             <div className="hero-actions">
               <a className="btn btn-gradient rounded-pill hero-action-button store-action-button" href="#pricing" aria-label="Download on Google Play"><span className="store-action-copy"><small>Download on</small><strong>Google Play</strong></span><i className="bi bi-google-play store-action-icon" /></a>
@@ -81,13 +89,20 @@ export function PricingSection() {
           <div className="text-center mb-5">
             <p className="eyebrow">Subscription</p>
             <h2 className="section-title display-5">Premium Access for WatchLog</h2>
-            <p className="lead-tight mx-auto">Subscribe with your BDApps mobile number to unlock real-time server telemetry, database monitoring, and unlimited push notifications.</p>
+            <p className="lead-tight mx-auto">Subscribe with your BDApps mobile number to unlock real-time server telemetry, database monitoring, and unlimited push notifications. Available for Robi and Cirkle users only.</p>
           </div>
           <div className="row g-4 justify-content-center">
             <div className="col-md-6 col-lg-4" data-aos="fade-up">
               <article className="pricing-card">
                 <span className="pricing-badge">Trial</span>
-                <span className="icon-box"><i className="bi bi-calendar-week" /></span>
+                <div className="d-flex align-items-center gap-2 mb-3">
+                  {/* <span className="icon-box mb-0"><i className="bi bi-calendar-week" /></span> */}
+                  <div className="carrier-pill">
+                    <Image src={`${assetBase}robi-logo.svg`} alt="Robi" width={42} height={16} className="carrier-logo" />
+                    <span className="carrier-divider" />
+                    <Image src={`${assetBase}cirkle-logo.svg`} alt="Cirkle" width={44} height={16} className="carrier-logo" />
+                  </div>
+                </div>
                 <h3 className="h4 fw-bold">Trial access</h3>
                 <div className="pricing-price"><span>BDT</span><strong>2.78</strong><small className="fs-6 text-muted-soft fw-normal">/day</small></div>
                 <p className="text-muted-soft mb-4">2.78 BDT/day including VAT+SD+Sc. Short-term access for testing WatchLog features.</p>
@@ -101,11 +116,18 @@ export function PricingSection() {
             </div>
             <div className="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
               <article className="pricing-card featured">
-                <span className="pricing-badge">Monthly</span>
-                <span className="icon-box"><i className="bi bi-calendar2-check" /></span>
-                <h3 className="h4 fw-bold">Monthly access</h3>
-                <div className="pricing-price"><span>BDT</span><strong>2.78</strong><small className="fs-6 text-muted-soft fw-normal">/month</small></div>
-                <p className="text-muted-soft mb-4">2.78 BDT/month including VAT+SD+Sc. Recurring monthly access via BDApps mobile balance.</p>
+                <span className="pricing-badge">Daily</span>
+                <div className="d-flex align-items-center gap-2 mb-3">
+                  {/* <span className="icon-box mb-0"><i className="bi bi-calendar2-check" /></span> */}
+                  <div className="carrier-pill">
+                    <Image src={`${assetBase}robi-logo.svg`} alt="Robi" width={42} height={16} className="carrier-logo" />
+                    <span className="carrier-divider" />
+                    <Image src={`${assetBase}cirkle-logo.svg`} alt="Cirkle" width={44} height={16} className="carrier-logo" />
+                  </div>
+                </div>
+                <h3 className="h4 fw-bold">Daily access</h3>
+                <div className="pricing-price"><span>BDT</span><strong>2.78</strong><small className="fs-6 text-muted-soft fw-normal">/day</small></div>
+                <p className="text-muted-soft mb-4">2.78 BDT/day including VAT+SD+Sc. Daily access via BDApps mobile balance.</p>
                 <ul className="pricing-list">
                   <li><i className="bi bi-check-circle-fill" />1-Click SSH server agent provisioning</li>
                   <li><i className="bi bi-check-circle-fill" />Postgres, MySQL, Redis & Supabase monitoring</li>
@@ -117,7 +139,14 @@ export function PricingSection() {
             <div className="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="160">
               <article className="pricing-card">
                 <span className="pricing-badge">Coming soon</span>
-                <span className="icon-box"><i className="bi bi-stars" /></span>
+                <div className="d-flex align-items-center gap-2 mb-3">
+                  {/* <span className="icon-box mb-0"><i className="bi bi-stars" /></span> */}
+                  <div className="carrier-pill">
+                    <Image src={`${assetBase}robi-logo.svg`} alt="Robi" width={42} height={16} className="carrier-logo" />
+                    <span className="carrier-divider" />
+                    <Image src={`${assetBase}cirkle-logo.svg`} alt="Cirkle" width={44} height={16} className="carrier-logo" />
+                  </div>
+                </div>
                 <h3 className="h4 fw-bold">Yearly access</h3>
                 <div className="pricing-price"><span>BDT</span><strong>49.99</strong></div>
                 <p className="text-muted-soft mb-4">Best value for long-term server reliability and monitoring.</p>
@@ -298,9 +327,9 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
 
         {step === "phone" && (
           <form onSubmit={requestOtp}>
-            <p className="eyebrow mb-2">Monthly subscription</p>
+            <p className="eyebrow mb-2">Daily subscription</p>
             <h2 className="h3 fw-bold" id="subscriptionTitle">Confirm your mobile number</h2>
-            <p className="text-muted-soft">BDApps will send a verification code to activate monthly access at 2.78 BDT/month including VAT+SD+Sc.</p>
+            <p className="text-muted-soft">BDApps will send a verification code to activate daily access at 2.78 BDT/day including VAT+SD+Sc. <span className="fw-bold gradient-crimson">Available for Robi and Cirkle users only</span></p>
             <label className="form-label fw-bold" htmlFor="subscriptionPhone">BDApps mobile number</label>
             <input className="form-control" id="subscriptionPhone" type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="01XXXXXXXXX" value={phone} onChange={(event) => setPhone(event.target.value)} disabled={busy} required />
             {error && <p className="subscription-error" role="alert">{error}</p>}
@@ -358,7 +387,7 @@ function MonthlySubscriptionModal({ open, onClose }: { open: boolean; onClose: (
             <span className="subscription-success-icon"><i className="bi bi-check-lg" /></span>
             <p className="eyebrow mt-3 mb-2">Subscription active</p>
             <h2 className="h3 fw-bold" id="subscriptionTitle">You are ready to use WatchLog</h2>
-            <p className="text-muted-soft">Your BDApps monthly subscription for <strong>{phone}</strong> is active.</p>
+            <p className="text-muted-soft">Your BDApps daily subscription for <strong>{phone}</strong> is active.</p>
             {apkDownloadUrl ? (
               <a className="btn btn-gradient rounded-pill w-100 mt-4" href={apkDownloadUrl} download>
                 <i className="bi bi-android2 me-2" />Download Android APK
