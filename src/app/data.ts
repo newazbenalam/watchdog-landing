@@ -61,3 +61,15 @@ export const faqs = [
 ] as const;
 
 export const navLinks = [["Home", "/"], ["Features", "/features"], ["FAQ", "/faq"], ["Privacy Policy", "/privacy-policy"], ["Terms", "/terms"], ["Contact", "/contact"]] as const;
+
+export const legalPages = [
+  ["Terms and Conditions", "/terms"],
+  ["Privacy Policy", "/privacy-policy"],
+  ["GDPR Notice", "/gdpr"],
+  ["Cookie Policy", "/cookies"],
+  ["Legal Notice", "/legal-notice"],
+  ["Acceptable Use Policy", "/acceptable-use"],
+  ["Data Processing Agreement", "/dpa"],
+  ["Security & Compliance", "/compliance"],
+  ["Delete Account", "/delete-account"],
+] as const;

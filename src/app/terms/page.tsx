@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHero } from "../components/AppShell";
+import { PageHero, RelatedLegal } from "../components/AppShell";
 
 export const metadata: Metadata = {
   title: "Terms and Conditions",
@@ -38,6 +38,7 @@ export default function TermsPage() {
           </article>
         </div>
       </section>
+      <RelatedLegal exclude="/terms" />
     </main>
   );
 }

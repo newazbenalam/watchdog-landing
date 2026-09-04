@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHero } from "../components/AppShell";
+import { PageHero, RelatedLegal } from "../components/AppShell";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -65,6 +65,7 @@ export default function PrivacyPage() {
           </article>
         </div>
       </section>
+      <RelatedLegal exclude="/privacy-policy" />
     </main>
   );
 }

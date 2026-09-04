@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FormEvent, ReactNode, useEffect, useState } from "react";
 import AOS from "aos";
-import { assetBase, navLinks } from "../data";
+import { assetBase, legalPages, navLinks } from "../data";
 import { LanguageToggle } from "./LanguageProvider";
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -76,7 +76,8 @@ function Footer() {
             <div className="d-flex gap-3 fs-5"><a href="#" aria-label="Twitter"><i className="bi bi-twitter-x" /></a><a href="#" aria-label="LinkedIn"><i className="bi bi-linkedin" /></a><a href="mailto:newazbenalam@gmail.com" aria-label="Email"><i className="bi bi-envelope" /></a></div>
           </div>
           <div className="col-6 col-lg-2"><h3 className="h6 fw-bold">Product</h3><Link className="d-block mb-2" href="/features">Features</Link><Link className="d-block mb-2" href="/faq">FAQ</Link><a className="d-block" href="#pricing">Download</a></div>
-          <div className="col-6 col-lg-2"><h3 className="h6 fw-bold">Legal</h3><Link className="d-block mb-2" href="/privacy-policy">Privacy</Link><Link className="d-block mb-2" href="/terms">Terms</Link><Link className="d-block" href="/delete-account">Delete Account</Link></div>
+          <div className="col-6 col-lg-2"><h3 className="h6 fw-bold">Legal</h3><Link className="d-block mb-2" href="/terms">Terms &amp; Conditions</Link><Link className="d-block mb-2" href="/privacy-policy">Privacy Policy</Link><Link className="d-block mb-2" href="/cookies">Cookie Policy</Link><Link className="d-block mb-2" href="/gdpr">GDPR Notice</Link><Link className="d-block" href="/legal-notice">Legal Notice</Link></div>
+          <div className="col-6 col-lg-2"><h3 className="h6 fw-bold">Compliance</h3><Link className="d-block mb-2" href="/compliance">Security &amp; Compliance</Link><Link className="d-block mb-2" href="/acceptable-use">Acceptable Use</Link><Link className="d-block mb-2" href="/dpa">Data Processing</Link><Link className="d-block" href="/delete-account">Delete Account</Link></div>
           <div className="col-lg-3"><h3 className="h6 fw-bold">Support</h3><Link className="d-block mb-2" href="/contact">Contact</Link><a className="d-block" href="mailto:newazbenalam@gmail.com">newazbenalam@gmail.com</a></div>
         </div>
         <div className="border-top mt-5 pt-4 text-muted-soft small">Copyright {new Date().getFullYear()} WatchLog. All rights reserved.</div>
@@ -91,6 +92,24 @@ function ToastHost() {
 
 export function PageHero({ title, subtitle }: { title: string; subtitle: string }) {
   return <section className="page-hero"><div className="container"><p className="eyebrow mb-2">WatchLog</p><h1 className="section-title display-4 mb-3">{title}</h1><p className="lead lead-tight mb-0">{subtitle}</p></div></section>;
+}
+
+export function RelatedLegal({ exclude }: { exclude?: string }) {
+  return (
+    <section className="pb-5">
+      <div className="container">
+        <article className="legal-card">
+          <h2>Related Legal Documents</h2>
+          <p className="text-muted-soft">All WatchLog legal and compliance policies are part of one agreement framework:</p>
+          <div className="feature-list">
+            {legalPages.filter(([, href]) => href !== exclude).map(([label, href]) => (
+              <Link key={href} href={href}><span>{label}</span></Link>
+            ))}
+          </div>
+        </article>
+      </div>
+    </section>
+  );
 }
 
 export function Cta() {
